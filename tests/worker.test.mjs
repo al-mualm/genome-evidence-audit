@@ -1,0 +1,5 @@
+import test from'node:test';import assert from'node:assert/strict';import{DEMO}from'../public/audit-core.mjs';
+globalThis.self={postMessage(){}};await import('../public/audit-worker.mjs');
+async function invoke(data){const messages=[];self.postMessage=m=>messages.push(m);await self.onmessage({data});return messages;}
+test('worker reads File inputs, hashes bytes, emits progress and returns example results',async()=>{const files=Object.fromEntries(Object.entries(DEMO).map(([k,v])=>[k,new File([v],k+'.fasta')]));const messages=await invoke({...files,example:true});const result=messages.at(-1);assert.equal(result.type,'result');assert.equal(result.result.summary.lost,1);assert.equal(result.result.example_only,true);assert.match(result.result.inputs.full.sha256,/^[a-f0-9]{64}$/);assert.ok(messages.some(m=>m.type==='progress'))});
+test('worker rejects missing and oversized input instead of publishing partial results',async()=>{assert.equal((await invoke({})).at(-1).type,'error');const msg=await invoke({full:new File([new Uint8Array(24*1024*1024+1)],'large.fasta')});assert.match(msg.at(-1).message,/exceeds/);assert.ok(!msg.some(m=>m.type==='result'))});

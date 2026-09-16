@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "datasets": 107,
+  "marker_transitions": 733,
+  "checks": [
+    "exact match counts",
+    "all hit coordinates and strands",
+    "retention states",
+    "copy-count decrease",
+    "exact parent subset with multiplicity"
+  ],
+  "reference": "Python evidence_stability.py audit() v0.2.0",
+  "browser_core": "0.1.0",
+  "limitations": "Computational parity only. Does not validate biological truth, empirical calibration, or browser UI behavior.",
+  "date": "2026-09-16T16:35:05.646Z"
+}
