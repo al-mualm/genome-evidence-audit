@@ -1,6 +1,6 @@
->example_retained
+>demo_resistance_marker|category=resistance|trait=invented_beta_lactam_example
 AGCTACGA
->example_lost
+>demo_virulence_marker|category=virulence|trait=invented_siderophore_example
 GGTACCAA
->example_not_detected
+>demo_mlst_allele|category=mlst|locus=phoE|allele=demo
 CCCCAAAA

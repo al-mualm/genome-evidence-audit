@@ -1,16 +1,32 @@
 # Genome Evidence Audit — browser edition
 
-A research interface for the direct exact-sequence-retention component of the study software. Select an original assembly, its selected contigs, and marker FASTA; inspect the results and download CSV or JSON.
+A research interface for the direct exact-sequence-retention component of the study software. Select an original assembly, its selected contigs, and marker FASTA; inspect the results and download CSV or JSON. Version 0.2.0 can classify user-annotated markers as resistance, virulence, MLST, species, or other evidence.
 
 ## Start
 
 - Open the website in a current desktop browser.
 - Click **Try an example** for invented short sequences (one retained marker, one lost marker, one absent marker).
 - Choose your three uncompressed FASTA files and click **Run sequence audit**.
+- Optionally annotate marker headers, for example `>blaKPC-2|category=resistance|trait=carbapenem|database=AMRFinderPlus`.
 - Inspect the subset check before interpreting any sequence loss.
 - Download the full report, including SHA-256 input fingerprints and 1-based inclusive match coordinates.
 
-No FASTQ upload, assembly, reference alignment, automatic marker identification, ST assignment, resistance/virulence prediction, threshold optimization or empirical calibration runs in this edition. It is not a replacement for the full Python study pipeline. A supplied marker that has no exact hit in the original assembly cannot support a baseline-loss conclusion.
+The evidence category and descriptive fields come from the uploaded FASTA header; the website does not verify them against an external database. Exact detection can report that a supplied resistance-associated, virulence-associated, MLST, or species marker sequence is present or was lost during processing. It does not convert that match into antimicrobial susceptibility, disease severity, species confirmation, sequence type, or transmission.
+
+No FASTQ upload, assembly, reference alignment, automatic marker identification, database search, ST assignment, phenotype prediction, threshold optimization or empirical calibration runs in this edition. It is not a replacement for AMRFinderPlus, Kleborate, Kaptive, a full MLST caller, phenotypic susceptibility testing, or an outbreak analysis pipeline. A supplied marker that has no exact hit in the original assembly cannot support a baseline-loss conclusion.
+
+## Marker annotation format
+
+Marker metadata are optional pipe-delimited `key=value` fields in the FASTA identifier. Supported categories are `resistance` (or `amr`), `virulence`, `mlst`, `species`, and `other`. Supported descriptive fields are `trait`, `locus`, `allele`, `database` (or `db`), and `accession`.
+
+```fasta
+>blaKPC-2|category=resistance|trait=carbapenem|database=AMRFinderPlus|accession=WP_000000001
+ACGT...
+>phoE_6|category=mlst|locus=phoE|allele=6|database=PubMLST
+ACGT...
+```
+
+Use database names, versions, and accessions that can be independently checked. The annotation is included in CSV and JSON exports.
 
 ## Privacy and limits
 
@@ -46,10 +62,10 @@ A manual GitHub Pages workflow is included at `.github/workflows/pages.yml`. Ena
 
 This verifies computational agreement, not biological accuracy, clinical utility, novelty or superiority to existing tools. The reference-context and population-calibration portions of the study are outside this edition. Empty marker collections in the research archive can be compared at the core-function level; the web form intentionally rejects an empty marker file.
 
-The interface release is v0.1.1; the byte-identical calculation core remains v0.1.0 and the Python reference remains v0.2.0. Computational parity does not substitute for comprehensive browser compatibility or usability testing.
+The interface and calculation core are v0.2.0. Exact retention behavior remains unchanged from the validated v0.1.1 interface; the new annotation parser and category summaries have automated tests. The Python reference remains v0.2.0. Computational parity does not substitute for biological validation, comprehensive browser compatibility, or usability testing.
 
 ## Citation and reference implementation
 
-Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.1.1. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.1.1
+Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.2.0. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.2.0
 
 The original Python audit core (v0.2.0) is in `reference/evidence_stability.py`; its version numbering is independent of the browser edition. The repository contains the audit reference and browser interface, not all assembly/calibration workflow scripts or raw study inputs. The release has no archival DOI.

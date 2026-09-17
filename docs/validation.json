@@ -10,7 +10,8 @@
     "exact parent subset with multiplicity"
   ],
   "reference": "Python evidence_stability.py audit() v0.2.0",
-  "browser_core": "0.1.0",
-  "limitations": "Computational parity only. Does not validate biological truth, empirical calibration, or browser UI behavior.",
+  "browser_core": "0.2.0 (exact-retention calculation unchanged from the validated core)",
+  "annotation_extension": "Automated tests cover marker-header parsing, evidence categories, grouped counts and CSV export fields.",
+  "limitations": "Computational parity only. User-supplied evidence annotations are not database-verified and do not validate biological truth, phenotype, species identity, transmission, empirical calibration, or browser UI behavior.",
   "date": "2026-09-16T16:35:05.646Z"
 }
