@@ -22,7 +22,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: /genome-evidence-audit
+          SITE_BASE_PATH: /genome-evidence-audit/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client

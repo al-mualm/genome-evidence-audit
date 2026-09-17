@@ -10,5 +10,5 @@ Public release of the browser interface and direct exact-sequence-retention calc
 - Scope: excludes raw-read assembly, automated marker discovery, reference-context alignment, threshold sweeps and population calibration. Engineering agreement does not measure diagnostic accuracy or usability.
 - Public repository contains invented example sequences only; no patient data or real study sequences.
 
-Website: https://genome-evidence-audit.almualm.chatgpt.site
+Website: https://al-mualm.github.io/genome-evidence-audit/
 Repository: https://github.com/al-mualm/genome-evidence-audit

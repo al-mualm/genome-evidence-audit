@@ -36,7 +36,7 @@ Static output is `dist/client`. `public/audit-core.mjs` is the calculation imple
 
 ## GitHub and deployment
 
-The public website is https://genome-evidence-audit.almualm.chatgpt.site and source code is at https://github.com/al-mualm/genome-evidence-audit. Release v0.1.0 identifies the browser edition reported in the manuscript. No patient metadata or study sequences are included. Project-authored code is available under the MIT License; dependencies retain their respective licenses.
+The public website is https://al-mualm.github.io/genome-evidence-audit/ and source code is at https://github.com/al-mualm/genome-evidence-audit. Release v0.1.1 identifies the browser edition reported in the manuscript. No patient metadata or study sequences are included. Project-authored code is available under the MIT License; dependencies retain their respective licenses.
 
 A manual GitHub Pages workflow is included at `.github/workflows/pages.yml`. Enable Pages with GitHub Actions as the source and run the workflow when public release is intended and the repository/account plan supports it. The build sets the repository base path. GitHub Pages hosts static application files; all analysis executes on the visitor's device. The workflow is manual so ordinary source pushes do not publish unexpectedly.
 
@@ -46,10 +46,10 @@ A manual GitHub Pages workflow is included at `.github/workflows/pages.yml`. Ena
 
 This verifies computational agreement, not biological accuracy, clinical utility, novelty or superiority to existing tools. The reference-context and population-calibration portions of the study are outside this edition. Empty marker collections in the research archive can be compared at the core-function level; the web form intentionally rejects an empty marker file.
 
-Broader browser interaction/visual testing was not requested and is not claimed. The optional read-only WebMCP summary tool is feature-detected; no supported WebMCP validation context was available, so its registration contract has not been independently verified.
+The interface release is v0.1.1; the byte-identical calculation core remains v0.1.0 and the Python reference remains v0.2.0. Computational parity does not substitute for comprehensive browser compatibility or usability testing.
 
 ## Citation and reference implementation
 
-Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.1.0. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.1.0
+Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.1.1. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.1.1
 
 The original Python audit core (v0.2.0) is in `reference/evidence_stability.py`; its version numbering is independent of the browser edition. The repository contains the audit reference and browser interface, not all assembly/calibration workflow scripts or raw study inputs. The release has no archival DOI.

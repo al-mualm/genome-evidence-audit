@@ -1,5 +1,5 @@
-import {sites} from '@openai/sites-vite-plugin';
 import tailwindcss from '@tailwindcss/postcss';
-import vinext from 'vinext';
+import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
-export default defineConfig({css:{postcss:{plugins:[tailwindcss()]}},server:{watch:{useFsEvents:false,usePolling:true}},plugins:[vinext(),sites()]});
+import {fileURLToPath, URL} from 'node:url';
+export default defineConfig({base:process.env.SITE_BASE_PATH||'/',build:{outDir:'dist/client'},resolve:{alias:{'@':fileURLToPath(new URL('.',import.meta.url))}},css:{postcss:{plugins:[tailwindcss()]}},plugins:[react()]});
