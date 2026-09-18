@@ -10,8 +10,23 @@
     "exact parent subset with multiplicity"
   ],
   "reference": "Python evidence_stability.py audit() v0.2.0",
-  "browser_core": "0.2.1 (exact-retention calculation unchanged from the validated core)",
+  "browser_core": "0.3.0-alpha.1 (exact-retention calculation unchanged from the validated core)",
   "annotation_extension": "Automated tests cover marker-header parsing, evidence categories, grouped counts and CSV export fields.",
-  "limitations": "Computational parity only. User-supplied evidence annotations are not database-verified and do not validate biological truth, phenotype, species identity, transmission, empirical calibration, or browser UI behavior.",
-  "date": "2026-09-16T16:35:05.646Z"
+  "limitations": "The retention comparison establishes computational parity only. The integrated workbench has a single-assembly concordance check, not a sensitivity/specificity validation. AMR allele labels are closest nucleotide references; protein-level correction and QRDR, porin and colistin mutation logic are not implemented. Species and relatedness outputs remain screening results and no clinical phenotype, severity or direct transmission is inferred.",
+  "date": "2026-09-18T00:00:00+03:00",
+  "integrated_workbench": {
+    "automated_tests": 23,
+    "public_validation_assembly": "ERR10921830",
+    "input_sha256": "f28db1515fa0ef56d60e7d493ff7e8454ca201b651763c780213f35e3242e517",
+    "official_comparator": "Kleborate source commit 550ce22a2c01c76064f4dabf403704ee2293356e",
+    "concordant_results": {
+      "total_bp": 5677976,
+      "contigs": 196,
+      "n50": 160135,
+      "species": "Klebsiella pneumoniae",
+      "mlst": "ST147",
+      "high_confidence_non_redundant_amr_families": 12,
+      "virulence_score": 0
+    }
+  }
 }

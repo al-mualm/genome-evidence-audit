@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import GenomeWorkbench from '@/components/genome-workbench';
 import {
   Table,
   TableHeader,
@@ -216,7 +217,7 @@ export default function Home() {
             Genome Evidence <b>Audit</b>
           </span>
         </a>
-        <span className="version">RESEARCH TOOL · v0.2.1</span>
+        <span className="version">RESEARCH TOOL · v0.3.0-alpha.1</span>
       </header>
       <div className="workspace">
         <section className="intro">
@@ -243,6 +244,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <GenomeWorkbench />
         <div className="audit-grid">
           <section className="panel">
             <div className="section-title">
@@ -646,15 +648,14 @@ export default function Home() {
           aria-labelledby="roadmap-title"
         >
           <div>
-            <p className="eyebrow">GITHUB-ONLY EXTENSION</p>
+            <p className="eyebrow">METHOD &amp; VALIDATION STATUS</p>
             <h2 id="roadmap-title">
-              A reproducible path to automated genome interpretation
+              Integrated analysis with explicit scientific limits
             </h2>
             <p>
-              Lightweight typing can run locally in the browser. Larger,
-              database-backed analyses can run in a researcher-controlled
-              private GitHub repository and return a versioned report for local
-              viewing.
+              The workbench runs locally in the browser with a pinned reference
+              snapshot and exports a versioned, auditable report. Every result
+              records where genomic evidence ends and clinical inference begins.
             </p>
           </div>
           <div className="roadmap-grid">
@@ -668,9 +669,9 @@ export default function Home() {
             <article>
               <b>Antimicrobial resistance</b>
               <p>
-                Versioned Kleborate and AMRFinderPlus outputs, with drug-level
-                predictions only where a validated rule exists and AST kept
-                separate.
+                CARD 3.2.9 family-level screening reports high-confidence and
+                partial candidates separately. It never labels an isolate
+                susceptible from gene absence.
               </p>
             </article>
             <article>
@@ -683,9 +684,9 @@ export default function Home() {
             <article>
               <b>Transmission compatibility</b>
               <p>
-                Batch core-genome distances combined with dates and locations
-                can support compatible, incompatible, or inconclusive—not
-                confirmed—transmission.
+                Batch MinHash distances identify close genome pairs for
+                follow-up. Confirmation still requires a validated SNP/cgMLST
+                workflow plus dates, locations and epidemiological evidence.
               </p>
             </article>
           </div>

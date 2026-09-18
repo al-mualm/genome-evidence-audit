@@ -1,23 +1,30 @@
 # Genome Evidence Audit — browser edition
 
-A research interface for the direct exact-sequence-retention component of the study software. Select an original assembly, its selected contigs, and marker FASTA; inspect the results and download CSV or JSON. Version 0.2.1 can classify user-annotated markers as resistance, virulence, MLST, species, or other evidence.
+Genome Evidence Audit is a static, browser-only research application for _Klebsiella_ assembled genomes. Version `0.3.0-alpha.1` places two reproducible workflows on one website:
 
-## Start
+1. an exact sequence-retention audit comparing an original assembly, selected contigs and user-supplied marker sequences; and
+2. an integrated _Klebsiella_ workbench for assembly QC, reference-panel species screening, seven-locus MLST, AMR-family evidence, virulence loci and pairwise genomic relatedness screening.
 
-- Open the website in a current desktop browser.
-- Click **Try an example** for invented resistance, virulence, MLST, and species markers (two retained markers, one lost marker, and one absent marker).
-- Choose your three uncompressed FASTA files and click **Run sequence audit**.
-- Optionally annotate marker headers, for example `>blaKPC-2|category=resistance|trait=carbapenem|database=AMRFinderPlus`.
-- Inspect the subset check before interpreting any sequence loss.
-- Download the full report, including SHA-256 input fingerprints and 1-based inclusive match coordinates.
+The public website is <https://al-mualm.github.io/genome-evidence-audit/>. Genome files are analysed locally in the browser and are not uploaded to an analysis server.
 
-The evidence category and descriptive fields come from the uploaded FASTA header; the website does not verify them against an external database. Exact detection can report that a supplied resistance-associated, virulence-associated, MLST, or species marker sequence is present or was lost during processing. It does not convert that match into antimicrobial susceptibility, disease severity, species confirmation, sequence type, or transmission.
+## Integrated genome workbench
 
-No FASTQ upload, assembly, reference alignment, automatic marker identification, database search, ST assignment, phenotype prediction, threshold optimization or empirical calibration runs in this edition. It is not a replacement for AMRFinderPlus, Kleborate, Kaptive, a full MLST caller, phenotypic susceptibility testing, or an outbreak analysis pipeline. A supplied marker that has no exact hit in the original assembly cannot support a baseline-loss conclusion.
+Upload one to twelve uncompressed assembly FASTA files (`.fasta`, `.fa` or `.fna`, maximum 30 MiB each), then select **Run integrated analysis**. The downloadable JSON report contains input SHA-256 fingerprints, software and database versions, per-sample evidence and pairwise results.
 
-## Marker annotation format
+- **Assembly QC:** total size, contig count, N50, ambiguous bases and screening warnings.
+- **Species screen:** deterministic canonical 15-mer MinHash assignment against a fixed ten-genome _Klebsiella_-focused panel, with strong, weak, ambiguous and unassigned outcomes.
+- **MLST:** seven-locus _K. pneumoniae_ complex allele calls and profile lookup.
+- **AMR evidence:** non-redundant acquired or intrinsic resistance-family candidates aligned against Kleborate's CARD 3.2.9 snapshot. High-confidence and partial candidates are separated. The displayed allele is explicitly the closest reference allele, not a confirmed allele assignment.
+- **Virulence evidence:** gene completeness for `ybt`, `iuc`, `iro`, `clb` and `rmp`, plus a Kleborate-style virulence score from 0 to 5.
+- **Relatedness screen:** pairwise MinHash distances for uploaded assemblies. Close pairs require confirmation with a validated SNP or cgMLST workflow and epidemiological data.
 
-Marker metadata are optional pipe-delimited `key=value` fields in the FASTA identifier. Supported categories are `resistance` (or `amr`), `virulence`, `mlst`, `species`, and `other`. Supported descriptive fields are `trait`, `locus`, `allele`, `database` (or `db`), and `accession`.
+The site does not infer phenotypic susceptibility from gene absence, predict patient disease severity, replace culture or validated whole-genome species confirmation, or prove direct transmission. These abstentions are part of the report rather than missing features.
+
+The methods, thresholds and validation record are documented in [`docs/GENOME_WORKBENCH_METHODS.md`](docs/GENOME_WORKBENCH_METHODS.md) and [`docs/validation.json`](docs/validation.json).
+
+## Exact sequence-retention audit
+
+Select an original assembly, its selected contigs and a marker FASTA. Marker headers may include pipe-delimited annotations such as:
 
 ```fasta
 >blaKPC-2|category=resistance|trait=carbapenem|database=AMRFinderPlus|accession=WP_000000001
@@ -26,15 +33,23 @@ ACGT...
 ACGT...
 ```
 
-Use database names, versions, and accessions that can be independently checked. The annotation is included in CSV and JSON exports.
+The audit checks exact matches on both strands, copy counts, 1-based inclusive coordinates and whether selected contigs are an exact sequence subset of the original assembly. Category and trait fields come from the uploaded header and are not independently verified. The **Try an example** button uses invented sequences solely to demonstrate reporting behavior.
 
-## Privacy and limits
+## Privacy
 
-Genome inputs stay in browser memory and are processed in a Web Worker. The application makes no network request containing input files, names, sequences or results, uses no analytics, and does not store inputs in browser storage. Ordinary site hosting/access logs are separate from the analysis. Downloads are saved only when requested. Closing the tab or clearing files releases application references; no forensic secure-deletion claim is made.
+Analysis runs in browser memory and the application has no analysis backend, account system or analytics. The workbench downloads pinned reference data and the minimap2 WebAssembly runtime, but does not send the uploaded assembly, filename, sequence or result in those requests. Ordinary GitHub Pages access logs are separate from analysis. A report is written to disk only when the user requests a download.
 
-Assemblies: A/C/G/T/N, maximum 24 MiB each and 20,000 contigs. Markers: A/C/G/T only, maximum 256 KiB and 64 sequences. Matching aborts above 10,000 occurrences for a marker. Empty selected FASTA is supported; original and marker inputs must be nonempty. Use the command-line tool for larger or differently encoded inputs. No patient identifiers are necessary.
+## Reproducibility and versions
 
-The subset certificate tolerates renamed/reordered/reverse-complemented contigs, checks multiplicity, and rejects novel or altered contig sequences. Match counts include overlaps, count palindromic markers once per coordinate, and search both strands. Retention and copy-count reduction are reported separately.
+- Application: `0.3.0-alpha.1`
+- Browser alignment engine: minimap2 2.22 through Aioli/BioWasm
+- Reference source: Kleborate commit `550ce22a2c01c76064f4dabf403704ee2293356e`
+- AMR reference snapshot: CARD 3.2.9 as bundled by that Kleborate commit
+- Species panel: canonical 15-mer, bottom-2000 MinHash sketches generated from ten pinned Kleborate test references
+
+The workbench is an alpha research implementation. On public assembly ERR10921830, browser results agreed with official Kleborate for assembly size, contig count, N50, _K. pneumoniae_ assignment, ST147, 12 high-confidence AMR-family loci after non-redundancy/partial-hit handling, and virulence score 0. Exact AMR allele labels can differ because the website reports the closest nucleotide reference and does not reproduce Kleborate's protein-level mutation and truncation logic. QRDR, porin and colistin-resistance mutation calling are not implemented in this alpha release.
+
+The earlier retention core retains computational parity with the bundled Python reference across 107 study datasets and 733 marker transitions. This checks calculation agreement, not biological or clinical validity.
 
 ## Local development
 
@@ -48,26 +63,12 @@ npm run typecheck
 npm run build
 ```
 
-Static output is `dist/client`. `public/audit-core.mjs` is the calculation implementation and `public/audit-worker.mjs` is the file-reading, hashing and progress adapter. There is no analysis backend or API key.
+Static output is written to `dist/client`. `public/genome-core.mjs` contains the integrated analysis helpers, while `public/audit-core.mjs` contains the exact-retention calculation. No API key or server is required.
 
-## GitHub and deployment
+## Deployment and citation
 
-The public website is https://al-mualm.github.io/genome-evidence-audit/ and source code is at https://github.com/al-mualm/genome-evidence-audit. Release v0.1.1 identifies the browser edition reported in the manuscript. No patient metadata or study sequences are included. Project-authored code is available under the MIT License; dependencies retain their respective licenses.
+The manual GitHub Pages workflow is `.github/workflows/pages.yml`. The source is public at <https://github.com/al-mualm/genome-evidence-audit>. No patient metadata, study assemblies or raw reads are included.
 
-A manual GitHub Pages workflow is included at `.github/workflows/pages.yml`. Enable Pages with GitHub Actions as the source and run the workflow when public release is intended and the repository/account plan supports it. The build sets the repository base path. GitHub Pages hosts static application files; all analysis executes on the visitor's device. The workflow is manual so ordinary source pushes do not publish unexpectedly.
+Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.3.0-alpha.1. 2026. <https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.3.0-alpha.1>
 
-## Validation and scientific status
-
-`npm test` exercises exact matches, reverse complements, coordinates, overlapping matches, multiplicity, copy reduction, malformed inputs, output escaping, file limits and worker behavior. `tests/reconcile-study.mjs` compares the browser calculation core to the bundled reference Python `audit()` on the local study files without copying or publishing them. Aggregated parity results are in `docs/validation.json` when available.
-
-This verifies computational agreement, not biological accuracy, clinical utility, novelty or superiority to existing tools. The reference-context and population-calibration portions of the study are outside this edition. Empty marker collections in the research archive can be compared at the core-function level; the web form intentionally rejects an empty marker file.
-
-The interface and calculation core are v0.2.1. Exact retention behavior remains unchanged from the validated v0.1.1 interface; the annotation parser, four-category demonstration, and category summaries have automated tests. The Python reference remains v0.2.0. Computational parity does not substitute for biological validation, comprehensive browser compatibility, or usability testing.
-
-The proposed GitHub-only extension for automated species, MLST, AMR, virulence, and multi-genome relatedness reporting is documented in [`docs/GITHUB_ONLY_INTERPRETATION_PLAN.md`](docs/GITHUB_ONLY_INTERPRETATION_PLAN.md). These proposed modules are not implemented or validated in the current browser release.
-
-## Citation and reference implementation
-
-Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.2.1. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.2.1
-
-The original Python audit core (v0.2.0) is in `reference/evidence_stability.py`; its version numbering is independent of the browser edition. The repository contains the audit reference and browser interface, not all assembly/calibration workflow scripts or raw study inputs. The release has no archival DOI.
+Project-authored code is available under the MIT License. Kleborate reference data and third-party software retain their original licenses and citation requirements.
