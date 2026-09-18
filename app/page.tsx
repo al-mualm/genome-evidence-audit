@@ -217,7 +217,7 @@ export default function Home() {
             Genome Evidence <b>Audit</b>
           </span>
         </a>
-        <span className="version">RESEARCH TOOL · v0.3.0-alpha.1</span>
+        <span className="version">RESEARCH TOOL · v0.3.0-alpha.2</span>
       </header>
       <div className="workspace">
         <section className="intro">

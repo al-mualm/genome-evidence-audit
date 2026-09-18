@@ -1,6 +1,6 @@
 # Genome Evidence Audit — browser edition
 
-Genome Evidence Audit is a static, browser-only research application for _Klebsiella_ assembled genomes. Version `0.3.0-alpha.1` places two reproducible workflows on one website:
+Genome Evidence Audit is a static, browser-only research application for _Klebsiella_ assembled genomes. Version `0.3.0-alpha.2` places two reproducible workflows on one website:
 
 1. an exact sequence-retention audit comparing an original assembly, selected contigs and user-supplied marker sequences; and
 2. an integrated _Klebsiella_ workbench for assembly QC, reference-panel species screening, seven-locus MLST, AMR-family evidence, virulence loci and pairwise genomic relatedness screening.
@@ -41,7 +41,7 @@ Analysis runs in browser memory and the application has no analysis backend, acc
 
 ## Reproducibility and versions
 
-- Application: `0.3.0-alpha.1`
+- Application: `0.3.0-alpha.2`
 - Browser alignment engine: minimap2 2.22 through Aioli/BioWasm
 - Reference source: Kleborate commit `550ce22a2c01c76064f4dabf403704ee2293356e`
 - AMR reference snapshot: CARD 3.2.9 as bundled by that Kleborate commit
@@ -69,6 +69,6 @@ Static output is written to `dist/client`. `public/genome-core.mjs` contains the
 
 The manual GitHub Pages workflow is `.github/workflows/pages.yml`. The source is public at <https://github.com/al-mualm/genome-evidence-audit>. No patient metadata, study assemblies or raw reads are included.
 
-Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.3.0-alpha.1. 2026. <https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.3.0-alpha.1>
+Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.3.0-alpha.2. 2026. <https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.3.0-alpha.2>
 
 Project-authored code is available under the MIT License. Kleborate reference data and third-party software retain their original licenses and citation requirements.

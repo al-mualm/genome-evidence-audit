@@ -10,7 +10,7 @@
     "exact parent subset with multiplicity"
   ],
   "reference": "Python evidence_stability.py audit() v0.2.0",
-  "browser_core": "0.3.0-alpha.1 (exact-retention calculation unchanged from the validated core)",
+  "browser_core": "0.3.0-alpha.2 (exact-retention calculation unchanged from the validated core)",
   "annotation_extension": "Automated tests cover marker-header parsing, evidence categories, grouped counts and CSV export fields.",
   "limitations": "The retention comparison establishes computational parity only. The integrated workbench has a single-assembly concordance check, not a sensitivity/specificity validation. AMR allele labels are closest nucleotide references; protein-level correction and QRDR, porin and colistin mutation logic are not implemented. Species and relatedness outputs remain screening results and no clinical phenotype, severity or direct transmission is inferred.",
   "date": "2026-09-18T00:00:00+03:00",

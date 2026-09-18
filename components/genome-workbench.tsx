@@ -199,9 +199,11 @@ export default function GenomeWorkbench() {
       setProgress('Starting minimap2 WebAssembly…');
       if (!cliRef.current) {
         const { default: Aioli } = await import('@biowasm/aioli');
-        cliRef.current = new Aioli(['minimap2/2.22'], {
-          printInterleaved: false,
-        });
+        // Aioli's constructor is thenable in the browser build even though its
+        // TypeScript declaration presents a synchronous class instance.
+        cliRef.current = await Promise.resolve(
+          new Aioli(['minimap2/2.22'], { printInterleaved: false }),
+        );
       }
       const cli = cliRef.current;
       const databasePaths = await cli.mount([
