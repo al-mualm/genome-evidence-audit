@@ -794,6 +794,44 @@ details p {
   font-weight: 700;
   font-size: 0.84rem;
 }
+.quick-workflow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+.quick-workflow li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.55rem;
+  align-items: center;
+  padding: 0.7rem;
+  border-radius: 10px;
+  background: #edf3eb;
+}
+.quick-workflow li > span {
+  grid-row: 1 / 3;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: #557763;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.quick-workflow b {
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+.quick-workflow small {
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.3;
+}
 .workbench-input {
   padding: 1rem;
   border: 1px solid #d9e4da;
@@ -831,13 +869,38 @@ details p {
   flex-wrap: wrap;
   margin: 0.8rem 0;
 }
-.chosen-files span {
+.chosen-files > span,
+.chosen-file > span {
   padding: 0.35rem 0.55rem;
   border-radius: 7px;
   background: #edf2ec;
   color: #3f5548;
   font-size: 0.78rem;
   overflow-wrap: anywhere;
+}
+.chosen-file {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(120px, 180px);
+  align-items: center;
+  gap: 0.4rem;
+  min-width: min(100%, 330px);
+  padding: 0.35rem;
+  border: 1px solid #d9e4da;
+  border-radius: 9px;
+  background: white;
+}
+.chosen-file > span {
+  background: transparent;
+  padding: 0.2rem;
+}
+.chosen-file input {
+  width: 100%;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid #cbd7cb;
+  border-radius: 6px;
+  color: var(--ink);
+  background: #fafcf9;
+  font-size: 0.75rem;
 }
 .analysis-progress,
 .analysis-error {
@@ -858,6 +921,49 @@ details p {
   margin-top: 1.2rem;
   display: grid;
   gap: 1rem;
+}
+.publication-export {
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: white;
+  padding: 1rem;
+}
+.publication-export-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.publication-export-heading h3 {
+  margin: 0.15rem 0 0.25rem;
+  font:
+    700 1.1rem/1.2 Georgia,
+    serif;
+}
+.publication-export-heading p:not(.eyebrow) {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.83rem;
+}
+.publication-figure-preview {
+  overflow-x: auto;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f8faf7;
+}
+.publication-figure-preview svg {
+  display: block;
+  width: 100%;
+  min-width: 720px;
+  height: auto;
+}
+.figure-caption-preview {
+  margin: 0.8rem 0 0;
+  color: #536259;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 .result-overview {
   display: grid;
@@ -1003,11 +1109,51 @@ details p {
   line-height: 1.5;
   font-size: 0.84rem;
 }
+.citation-notice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccd8cb;
+  border-radius: 13px;
+  background: #f4f8f2;
+  color: #29473a;
+}
+.citation-notice > svg {
+  margin-top: 0.15rem;
+}
+.citation-notice h3 {
+  margin: 0 0 0.35rem;
+  font:
+    700 1rem/1.2 Georgia,
+    serif;
+}
+.citation-notice p {
+  margin: 0;
+  color: #52665a;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+.citation-notice blockquote {
+  margin: 0.75rem 0;
+  padding: 0.7rem 0.8rem;
+  border-left: 3px solid #6f8d76;
+  background: white;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
 
 @media (max-width: 850px) {
   .workbench-heading {
     flex-direction: column;
     gap: 0.8rem;
+  }
+  .publication-export-heading {
+    flex-direction: column;
+  }
+  .quick-workflow {
+    grid-template-columns: 1fr 1fr;
   }
   .privacy-pill {
     align-self: flex-start;
@@ -1027,6 +1173,9 @@ details p {
   }
 }
 @media (max-width: 560px) {
+  .quick-workflow {
+    grid-template-columns: 1fr;
+  }
   .result-overview,
   .evidence-grid {
     grid-template-columns: 1fr;

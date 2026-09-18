@@ -4,10 +4,14 @@ import { useMemo, useRef, useState } from 'react';
 import type Aioli from '@biowasm/aioli';
 import {
   Activity,
+  Clipboard,
   Download,
   Dna,
   FileArchive,
+  FileSpreadsheet,
+  ImageDown,
   LoaderCircle,
+  Quote,
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,6 +26,11 @@ import {
   pairwiseRelatedness,
   parsePaf,
 } from '../public/genome-core.mjs';
+import {
+  buildEvidenceSvg,
+  figureCaption,
+  resultsToCsv,
+} from '../public/publication-export.mjs';
 
 const KLEBORATE_COMMIT = '550ce22a2c01c76064f4dabf403704ee2293356e';
 const RAW = `https://raw.githubusercontent.com/klebgenomics/Kleborate/${KLEBORATE_COMMIT}/kleborate/modules`;
@@ -37,6 +46,7 @@ const VIRULENCE_MODULES: Record<string, string> = {
 
 type Result = {
   sample: string;
+  source_file: string;
   sha256: string;
   qc: {
     contigs: number;
@@ -84,16 +94,73 @@ type Result = {
   };
 };
 
+function defaultSampleLabel(name: string) {
+  return name.replace(/\.(fasta|fna|fa)(\.gz)?$/i, '');
+}
+
 function downloadJson(value: unknown, name: string) {
-  const url = URL.createObjectURL(
+  downloadBlob(
     new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' }),
+    name,
   );
+}
+
+function downloadBlob(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
   link.download = name;
   link.click();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
+
+function downloadText(text: string, name: string, type = 'text/plain') {
+  downloadBlob(new Blob([text], { type: `${type};charset=utf-8` }), name);
+}
+
+async function downloadPng(svg: string, name: string) {
+  const url = URL.createObjectURL(
+    new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }),
+  );
+  try {
+    const image = new Image();
+    image.src = url;
+    await image.decode();
+    const scale = 3;
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth * scale;
+    canvas.height = image.naturalHeight * scale;
+    const context = canvas.getContext('2d');
+    if (!context)
+      throw new Error('PNG export is not supported by this browser.');
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise<Blob>((resolve, reject) =>
+      canvas.toBlob(
+        (value) =>
+          value ? resolve(value) : reject(new Error('PNG export failed.')),
+        'image/png',
+      ),
+    );
+    downloadBlob(blob, name);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+const SOFTWARE_CITATION =
+  'Genome Evidence Audit contributors. Genome Evidence Audit browser edition, ' +
+  `version ${GENOME_VERSION}. 2026. https://github.com/al-mualm/genome-evidence-audit`;
+
+const SOFTWARE_BIBTEX = `@software{genome_evidence_audit_2026,
+  author  = {{Genome Evidence Audit contributors}},
+  title   = {Genome Evidence Audit browser edition},
+  year    = {2026},
+  version = {${GENOME_VERSION}},
+  url     = {https://github.com/al-mualm/genome-evidence-audit},
+  note    = {Research software; the peer-reviewed article citation will be added after publication}
+}`;
 
 async function sha256(file: File) {
   const digest = await crypto.subtle.digest(
@@ -141,10 +208,12 @@ async function analyseSketch(file: File) {
 
 export default function GenomeWorkbench() {
   const [files, setFiles] = useState<File[]>([]);
+  const [aliases, setAliases] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState('');
   const [error, setError] = useState('');
   const [results, setResults] = useState<Result[]>([]);
+  const [citationCopied, setCitationCopied] = useState(false);
   const [relatedness, setRelatedness] = useState<Record<
     string,
     unknown
@@ -152,6 +221,10 @@ export default function GenomeWorkbench() {
   const cliRef = useRef<Aioli | null>(null);
   const totalBp = useMemo(
     () => results.reduce((n, r) => n + r.qc.total_bp, 0),
+    [results],
+  );
+  const publicationSvg = useMemo(
+    () => (results.length ? buildEvidenceSvg(results, GENOME_VERSION) : ''),
     [results],
   );
 
@@ -214,6 +287,7 @@ export default function GenomeWorkbench() {
       const produced: Result[] = [];
       for (let index = 0; index < files.length; index += 1) {
         const file = files[index];
+        const fileKey = `${file.name}-${file.size}`;
         setProgress(`Analysing ${file.name} (${index + 1}/${files.length})…`);
         const [path] = await cli.mount([file]);
         const [{ stats, sketch }, digest] = await Promise.all([
@@ -235,7 +309,8 @@ export default function GenomeWorkbench() {
           paf.push(typeof output === 'string' ? output : output.stdout);
         }
         produced.push({
-          sample: file.name,
+          sample: aliases[fileKey]?.trim() || defaultSampleLabel(file.name),
+          source_file: file.name,
           sha256: digest,
           qc: stats,
           sketch,
@@ -307,6 +382,28 @@ export default function GenomeWorkbench() {
           <ShieldCheck size={18} /> Genome files stay in this browser
         </div>
       </div>
+      <ol className="quick-workflow" aria-label="Analysis workflow">
+        <li>
+          <span>1</span>
+          <b>Choose assemblies</b>
+          <small>FASTA files, one genome per file</small>
+        </li>
+        <li>
+          <span>2</span>
+          <b>Edit figure labels</b>
+          <small>Use short, de-identified sample names</small>
+        </li>
+        <li>
+          <span>3</span>
+          <b>Run locally</b>
+          <small>No genome upload or account</small>
+        </li>
+        <li>
+          <span>4</span>
+          <b>Export</b>
+          <small>JSON, CSV, SVG, PNG and caption</small>
+        </li>
+      </ol>
       <div className="workbench-input">
         <label className="assembly-drop">
           <FileArchive size={28} />
@@ -319,14 +416,41 @@ export default function GenomeWorkbench() {
             multiple
             accept=".fasta,.fa,.fna,text/plain"
             disabled={busy}
-            onChange={(event) => setFiles([...(event.target.files || [])])}
+            onChange={(event) => {
+              const selected = [...(event.target.files || [])];
+              setFiles(selected);
+              setAliases(
+                Object.fromEntries(
+                  selected.map((file) => [
+                    `${file.name}-${file.size}`,
+                    defaultSampleLabel(file.name),
+                  ]),
+                ),
+              );
+            }}
           />
         </label>
         <div className="chosen-files">
           {files.length ? (
-            files.map((file) => (
-              <span key={`${file.name}-${file.size}`}>{file.name}</span>
-            ))
+            files.map((file) => {
+              const key = `${file.name}-${file.size}`;
+              return (
+                <label className="chosen-file" key={key}>
+                  <span>{file.name}</span>
+                  <input
+                    value={aliases[key] || ''}
+                    maxLength={32}
+                    aria-label={`Figure label for ${file.name}`}
+                    onChange={(event) =>
+                      setAliases((current) => ({
+                        ...current,
+                        [key]: event.target.value,
+                      }))
+                    }
+                  />
+                </label>
+              );
+            })
           ) : (
             <span>No assemblies selected</span>
           )}
@@ -376,6 +500,79 @@ export default function GenomeWorkbench() {
               complete ST calls
             </span>
           </div>
+          <article className="publication-export">
+            <div className="publication-export-heading">
+              <div>
+                <p className="eyebrow">PUBLICATION EXPORT</p>
+                <h3>Genomic evidence profile</h3>
+                <p>
+                  Vector artwork, a high-resolution PNG, a complete summary
+                  table and a ready-to-edit figure caption.
+                </p>
+              </div>
+              <div className="exports">
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    downloadText(
+                      publicationSvg,
+                      'genomic-evidence-profile.svg',
+                      'image/svg+xml',
+                    )
+                  }
+                >
+                  <ImageDown /> SVG
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    downloadPng(
+                      publicationSvg,
+                      'genomic-evidence-profile-3x.png',
+                    ).catch((caught) =>
+                      setError(
+                        caught instanceof Error
+                          ? caught.message
+                          : 'PNG export failed.',
+                      ),
+                    )
+                  }
+                >
+                  <ImageDown /> PNG 3×
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    downloadText(
+                      resultsToCsv(results),
+                      'integrated-klebsiella-summary.csv',
+                      'text/csv',
+                    )
+                  }
+                >
+                  <FileSpreadsheet /> CSV
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    downloadText(
+                      figureCaption(results, GENOME_VERSION),
+                      'figure-caption.txt',
+                    )
+                  }
+                >
+                  <Download /> Caption
+                </Button>
+              </div>
+            </div>
+            <div
+              className="publication-figure-preview"
+              dangerouslySetInnerHTML={{ __html: publicationSvg }}
+            />
+            <p className="figure-caption-preview">
+              <b>Suggested caption.</b> {figureCaption(results, GENOME_VERSION)}
+            </p>
+          </article>
           {results.map((result) => (
             <article className="genome-result" key={result.sha256}>
               <div className="genome-result-title">
@@ -524,6 +721,48 @@ export default function GenomeWorkbench() {
           confirmation, or prove direct transmission.
         </p>
       </div>
+      <aside className="citation-notice" aria-labelledby="citation-title">
+        <Quote size={22} />
+        <div>
+          <h3 id="citation-title">How to cite this software</h3>
+          <p>
+            The peer-reviewed article citation will be placed here after
+            publication. Until then, cite the versioned software release below
+            so analyses remain reproducible.
+          </p>
+          <blockquote>{SOFTWARE_CITATION}</blockquote>
+          <div className="actions">
+            <Button
+              variant="outline"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(SOFTWARE_CITATION);
+                  setCitationCopied(true);
+                  setTimeout(() => setCitationCopied(false), 2500);
+                } catch {
+                  setError(
+                    'The browser blocked clipboard access. Use the BibTeX download instead.',
+                  );
+                }
+              }}
+            >
+              <Clipboard /> {citationCopied ? 'Copied' : 'Copy citation'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() =>
+                downloadText(
+                  SOFTWARE_BIBTEX,
+                  'genome-evidence-audit.bib',
+                  'application/x-bibtex',
+                )
+              }
+            >
+              <Download /> Download BibTeX
+            </Button>
+          </div>
+        </div>
+      </aside>
     </section>
   );
 }

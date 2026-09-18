@@ -1,5 +1,5 @@
 /** Browser-side Klebsiella assembly interpretation helpers. */
-export const GENOME_VERSION = '0.3.0-alpha.2';
+export const GENOME_VERSION = '0.3.1-alpha.1';
 export const MLST_GENES = [
   'gapA',
   'infB',

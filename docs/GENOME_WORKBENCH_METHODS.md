@@ -37,3 +37,7 @@ For batches, the program calculates Mash-style distances from the species sketch
 ## Validation status
 
 Unit tests cover deterministic and strand-invariant sketches, reference assignment, complete MLST, AMR non-redundancy, partial-hit separation, virulence scoring and pairwise reporting. A browser end-to-end run on public assembly ERR10921830 was compared with official Kleborate at the pinned source commit. Both reported 5,677,976 bp, 196 contigs, N50 160,135, _K. pneumoniae_, ST147, 12 non-redundant high-confidence AMR-family loci and virulence score 0. The comparison does not establish sensitivity or specificity across diverse lineages. Independent validation on curated positive and negative collections is required before clinical or surveillance use.
+
+## Publication exports
+
+After analysis, the browser creates a sample-by-feature evidence matrix. The matrix separates high-confidence and partial AMR-family evidence and complete and incomplete virulence loci, while displaying species, MLST and virulence score as annotation rows. The figure can be downloaded as editable SVG or as a three-times-resolution PNG. A matching CSV preserves the plotted values and additional QC fields, and a plain-text caption records the interpretation boundaries. Researchers can replace filenames with short, de-identified figure labels before analysis. The source filename remains in the JSON and CSV audit records but is not used as the figure label.
