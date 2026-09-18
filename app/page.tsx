@@ -83,6 +83,12 @@ const categoryNames: Record<Category, string> = {
   species: 'Species evidence',
   other: 'Unclassified marker',
 };
+const visibleEvidenceCategories: Category[] = [
+  'resistance',
+  'virulence',
+  'mlst',
+  'species',
+];
 const specs = [
   [
     'full',
@@ -210,7 +216,7 @@ export default function Home() {
             Genome Evidence <b>Audit</b>
           </span>
         </a>
-        <span className="version">RESEARCH TOOL · v0.2.0</span>
+        <span className="version">RESEARCH TOOL · v0.2.1</span>
       </header>
       <div className="workspace">
         <section className="intro">
@@ -364,6 +370,20 @@ export default function Home() {
                 <p>Export match counts, locations, and file fingerprints.</p>
               </li>
             </ol>
+            <div className="available-evidence">
+              <b>Available annotation categories</b>
+              <div>
+                {visibleEvidenceCategories.map((category) => (
+                  <span className={`category ${category}`} key={category}>
+                    {categoryNames[category]}
+                  </span>
+                ))}
+              </div>
+              <p>
+                These labels classify exact user-supplied markers. Select{' '}
+                <b>Try an example</b> to see all four in the results.
+              </p>
+            </div>
             <div className="scope">
               <b>Research interpretation</b>
               <p>
@@ -607,10 +627,10 @@ export default function Home() {
           <div>
             <h3>Start with the example</h3>
             <p>
-              The invented example contains annotated resistance, virulence, and
-              MLST markers: one retained, one lost, and one absent from both
-              assemblies. It demonstrates reporting behavior, not biological
-              performance.
+              The invented example contains annotated resistance, virulence,
+              MLST, and species markers: two retained, one lost, and one absent
+              from both assemblies. It demonstrates reporting behavior, not
+              biological performance.
             </p>
             <div className="example-links">
               {['full', 'selected', 'markers'].map((k) => (
@@ -619,6 +639,55 @@ export default function Home() {
                 </a>
               ))}
             </div>
+          </div>
+        </section>
+        <section
+          className="interpretation-roadmap"
+          aria-labelledby="roadmap-title"
+        >
+          <div>
+            <p className="eyebrow">GITHUB-ONLY EXTENSION</p>
+            <h2 id="roadmap-title">
+              A reproducible path to automated genome interpretation
+            </h2>
+            <p>
+              Lightweight typing can run locally in the browser. Larger,
+              database-backed analyses can run in a researcher-controlled
+              private GitHub repository and return a versioned report for local
+              viewing.
+            </p>
+          </div>
+          <div className="roadmap-grid">
+            <article>
+              <b>Species and complete MLST</b>
+              <p>
+                Reference-sketch screening, seven-locus allele calling, profile
+                lookup, quality checks, and abstention for ambiguous genomes.
+              </p>
+            </article>
+            <article>
+              <b>Antimicrobial resistance</b>
+              <p>
+                Versioned Kleborate and AMRFinderPlus outputs, with drug-level
+                predictions only where a validated rule exists and AST kept
+                separate.
+              </p>
+            </article>
+            <article>
+              <b>Virulence genotype</b>
+              <p>
+                Named loci and reproducible scores can be reported; a genome
+                cannot predict an individual patient’s disease severity.
+              </p>
+            </article>
+            <article>
+              <b>Transmission compatibility</b>
+              <p>
+                Batch core-genome distances combined with dates and locations
+                can support compatible, incompatible, or inconclusive—not
+                confirmed—transmission.
+              </p>
+            </article>
           </div>
         </section>
         <footer>

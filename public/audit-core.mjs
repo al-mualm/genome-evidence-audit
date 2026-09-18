@@ -1,5 +1,5 @@
 /** Exact sequence retention audit with optional marker-evidence annotations. */
-export const VERSION = '0.2.0';
+export const VERSION = '0.2.1';
 export const LIMITS = {
   assemblyBytes: 24 * 1024 * 1024,
   markerBytes: 256 * 1024,
@@ -261,5 +261,5 @@ export const DEMO = {
   full: '>kept_contig\nTTTAGCTACGATTTGGG\n>removed_contig\nAAAGGTACCAAATTT\n',
   selected: '>renamed_kept_contig\nTTTAGCTACGATTTGGG\n',
   markers:
-    '>demo_resistance_marker|category=resistance|trait=invented_beta_lactam_example\nAGCTACGA\n>demo_virulence_marker|category=virulence|trait=invented_siderophore_example\nGGTACCAA\n>demo_mlst_allele|category=mlst|locus=phoE|allele=demo\nCCCCAAAA\n',
+    '>demo_resistance_marker|category=resistance|trait=invented_beta_lactam_example\nAGCTACGA\n>demo_virulence_marker|category=virulence|trait=invented_siderophore_example\nGGTACCAA\n>demo_mlst_allele|category=mlst|locus=phoE|allele=demo\nCCCCAAAA\n>demo_species_marker|category=species|trait=invented_species_example\nTTTAGCTA\n',
 };

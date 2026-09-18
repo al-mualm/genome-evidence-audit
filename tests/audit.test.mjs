@@ -19,9 +19,15 @@ test('invented example: retained, lost and not detected', () => {
   assert.equal(r.sequence_subset_consistent, true);
   assert.deepEqual(
     r.markers.map((x) => x.status),
-    ['retained_exact', 'lost_during_selection', 'not_detected_in_either'],
+    [
+      'retained_exact',
+      'lost_during_selection',
+      'not_detected_in_either',
+      'retained_exact',
+    ],
   );
   assert.equal(r.summary.lost, 1);
+  assert.equal(r.summary.by_category.species.detected_after, 1);
 });
 test('renaming and reverse complement preserve subset', () => {
   const r = run('>old\nAACGTTAG\n', '>new\nCTAACGTT\n', '>m\nACGTTA\n');

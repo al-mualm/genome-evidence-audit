@@ -1,11 +1,11 @@
 # Genome Evidence Audit — browser edition
 
-A research interface for the direct exact-sequence-retention component of the study software. Select an original assembly, its selected contigs, and marker FASTA; inspect the results and download CSV or JSON. Version 0.2.0 can classify user-annotated markers as resistance, virulence, MLST, species, or other evidence.
+A research interface for the direct exact-sequence-retention component of the study software. Select an original assembly, its selected contigs, and marker FASTA; inspect the results and download CSV or JSON. Version 0.2.1 can classify user-annotated markers as resistance, virulence, MLST, species, or other evidence.
 
 ## Start
 
 - Open the website in a current desktop browser.
-- Click **Try an example** for invented short sequences (one retained marker, one lost marker, one absent marker).
+- Click **Try an example** for invented resistance, virulence, MLST, and species markers (two retained markers, one lost marker, and one absent marker).
 - Choose your three uncompressed FASTA files and click **Run sequence audit**.
 - Optionally annotate marker headers, for example `>blaKPC-2|category=resistance|trait=carbapenem|database=AMRFinderPlus`.
 - Inspect the subset check before interpreting any sequence loss.
@@ -62,10 +62,12 @@ A manual GitHub Pages workflow is included at `.github/workflows/pages.yml`. Ena
 
 This verifies computational agreement, not biological accuracy, clinical utility, novelty or superiority to existing tools. The reference-context and population-calibration portions of the study are outside this edition. Empty marker collections in the research archive can be compared at the core-function level; the web form intentionally rejects an empty marker file.
 
-The interface and calculation core are v0.2.0. Exact retention behavior remains unchanged from the validated v0.1.1 interface; the new annotation parser and category summaries have automated tests. The Python reference remains v0.2.0. Computational parity does not substitute for biological validation, comprehensive browser compatibility, or usability testing.
+The interface and calculation core are v0.2.1. Exact retention behavior remains unchanged from the validated v0.1.1 interface; the annotation parser, four-category demonstration, and category summaries have automated tests. The Python reference remains v0.2.0. Computational parity does not substitute for biological validation, comprehensive browser compatibility, or usability testing.
+
+The proposed GitHub-only extension for automated species, MLST, AMR, virulence, and multi-genome relatedness reporting is documented in [`docs/GITHUB_ONLY_INTERPRETATION_PLAN.md`](docs/GITHUB_ONLY_INTERPRETATION_PLAN.md). These proposed modules are not implemented or validated in the current browser release.
 
 ## Citation and reference implementation
 
-Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.2.0. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.2.0
+Genome Evidence Audit contributors. Genome Evidence Audit browser edition. Version 0.2.1. 2026. https://github.com/al-mualm/genome-evidence-audit/releases/tag/v0.2.1
 
 The original Python audit core (v0.2.0) is in `reference/evidence_stability.py`; its version numbering is independent of the browser edition. The repository contains the audit reference and browser interface, not all assembly/calibration workflow scripts or raw study inputs. The release has no archival DOI.

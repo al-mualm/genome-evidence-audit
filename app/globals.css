@@ -277,6 +277,27 @@ h2 {
   color: #56664d;
   margin: 5px 0;
 }
+.available-evidence {
+  border-top: 1px solid #cdd8c4;
+  padding: 18px 0;
+}
+.available-evidence > b {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+.available-evidence > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.available-evidence p {
+  margin: 10px 0 0;
+  color: #56664d;
+  font-size: 13px;
+}
 .scope {
   border-top: 1px solid #cdd8c4;
   padding-top: 18px;
@@ -611,6 +632,43 @@ details p {
   font-size: 13px;
   text-decoration: underline;
 }
+.interpretation-roadmap {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.6fr);
+  gap: 44px;
+  margin-top: 34px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+.interpretation-roadmap h2 {
+  font-family: Georgia, serif;
+  font-size: 25px;
+  font-weight: normal;
+}
+.interpretation-roadmap > div > p:not(.eyebrow),
+.roadmap-grid p {
+  color: #62705d;
+  font-size: 14px;
+}
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.roadmap-grid article {
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+.roadmap-grid b {
+  font-size: 14px;
+}
+.roadmap-grid p {
+  margin: 6px 0 0;
+}
 .spin {
   animation: spin 1.2s linear infinite;
 }
@@ -631,6 +689,14 @@ details p {
   .method {
     grid-template-columns: 1fr;
     gap: 22px;
+  }
+  .interpretation-roadmap {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 22px;
+  }
+  .roadmap-grid {
+    grid-template-columns: 1fr;
   }
   .stats {
     grid-template-columns: repeat(2, 1fr);

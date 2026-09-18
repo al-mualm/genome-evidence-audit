@@ -4,3 +4,5 @@ AGCTACGA
 GGTACCAA
 >demo_mlst_allele|category=mlst|locus=phoE|allele=demo
 CCCCAAAA
+>demo_species_marker|category=species|trait=invented_species_example
+TTTAGCTA
