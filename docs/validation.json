@@ -1,32 +1,44 @@
 {
-  "status": "passed",
-  "datasets": 107,
-  "marker_transitions": 733,
+  "status": "passed_for_retention_scope_only",
+  "datasets": 103,
+  "marker_transitions": 705,
+  "scope": "public datasets only; archived local analyses excluded",
   "checks": [
-    "exact match counts",
-    "all hit coordinates and strands",
+    "exact counts",
+    "hit coordinates and strands",
     "retention states",
     "copy-count decrease",
-    "exact parent subset with multiplicity"
+    "sequence subset with multiplicity"
   ],
-  "reference": "Python evidence_stability.py audit() v0.2.0",
-  "browser_core": "0.3.1-alpha.1 (exact-retention calculation unchanged from the validated core)",
-  "annotation_extension": "Automated tests cover marker-header parsing, evidence categories, grouped counts and CSV export fields.",
-  "limitations": "The retention comparison establishes computational parity only. The integrated workbench has a single-assembly concordance check, not a sensitivity/specificity validation. AMR allele labels are closest nucleotide references; protein-level correction and QRDR, porin and colistin mutation logic are not implemented. Species and relatedness outputs remain screening results and no clinical phenotype, severity or direct transmission is inferred.",
-  "date": "2026-09-18T00:00:00+03:00",
+  "reference": "Python evidence_stability.py",
+  "reference_sha256": "1e95c1be24bea8578fea5c6b039db058b8c07c8d9001da2f06f2b85f49562a99",
+  "audit_core_version": "0.2.1",
+  "audit_core_sha256": "d53535479712f1aed85a853df05db03aa562a81cdea9a36044930f2cebaaf2e0",
+  "website_release": "0.3.1-alpha.1",
+  "limitations": "Computational agreement only; not biological accuracy or clinical validation. Direct module invocation, not an end-to-end browser test. Header annotation fields are absent from the Python reference and are covered by separate unit tests.",
+  "date": "2026-09-18T15:21:06.563Z",
+  "public_input_fingerprints": "retention-validation.json",
+  "automated_tests": {
+    "passed": 26,
+    "failed": 0,
+    "rerun_date": "2026-09-18T18:21:35.469677+03:00"
+  },
   "integrated_workbench": {
-    "automated_tests": 26,
     "public_validation_assembly": "ERR10921830",
-    "input_sha256": "f28db1515fa0ef56d60e7d493ff7e8454ca201b651763c780213f35e3242e517",
-    "official_comparator": "Kleborate source commit 550ce22a2c01c76064f4dabf403704ee2293356e",
-    "concordant_results": {
-      "total_bp": 5677976,
-      "contigs": 196,
-      "n50": 160135,
-      "species": "Klebsiella pneumoniae",
-      "mlst": "ST147",
-      "high_confidence_non_redundant_amr_families": 12,
-      "virulence_score": 0
-    }
+    "input_sha256": "f28db1515fa0ef56efedc0875d93732afe7ce989ddafaab6e2ae557e8ef5aa99",
+    "input_hash_status": "verified against archived assembly and public processing table",
+    "historical_comparator_status": "not re-established; historical biological concordance figures excluded",
+    "scope": "No comprehensive feature-specific accuracy validation is claimed."
+  },
+  "public_assembly_fingerprints_matching_archived_processing": 103,
+  "local_technical_demonstration": {
+    "date": "2026-09-18T15:41:00.404Z",
+    "datasets": 4,
+    "baseline_marker_records": 27,
+    "audit_cases": 20,
+    "control_cases": 16,
+    "assembly_summary_comparisons": 4,
+    "status": "passed",
+    "scope": "Post-development demonstration of production retention and assembly-summary modules using freshly processed specified inputs. Not independent cohort validation, end-to-end browser testing, or biological annotation accuracy."
   }
 }

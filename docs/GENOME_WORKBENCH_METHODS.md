@@ -36,7 +36,11 @@ For batches, the program calculates Mash-style distances from the species sketch
 
 ## Validation status
 
-Unit tests cover deterministic and strand-invariant sketches, reference assignment, complete MLST, AMR non-redundancy, partial-hit separation, virulence scoring and pairwise reporting. A browser end-to-end run on public assembly ERR10921830 was compared with official Kleborate at the pinned source commit. Both reported 5,677,976 bp, 196 contigs, N50 160,135, _K. pneumoniae_, ST147, 12 non-redundant high-confidence AMR-family loci and virulence score 0. The comparison does not establish sensitivity or specificity across diverse lineages. Independent validation on curated positive and negative collections is required before clinical or surveillance use.
+The 26 existing automated tests pass. A fresh public-only comparison of the JavaScript retention module and bundled Python reference passes for 103 datasets and 705 marker transitions, including exact counts, coordinates, strands, retention states and sequence-subset checks. Module execution does not test the complete browser interface.
+
+A provenance review identified an incorrect input fingerprint in the historical ERR10921830 full-workbench comparator record. The actual assembly fingerprint agrees with the archived processing table and is corrected in `validation.json`. The earlier biological concordance figures are not treated as verified evidence. The fingerprint correction alone cannot retrospectively verify which input bytes the historical comparator used. Feature-specific biological validation remains incomplete.
+
+A separate post-development technical demonstration using four newly processed study inputs passed 20 retention comparisons (four fixed-selection cases and 16 controls) and four assembly-summary comparisons. The four inputs supplied 27 complete baseline housekeeping markers; incomplete baseline typing was retained as an unresolved outcome. This module-level exercise does not establish independent biological validation.
 
 ## Publication exports
 

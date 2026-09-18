@@ -1,3 +1,5 @@
+> Validation correction 2026-09-18: the historical ERR10921830 comparison below has an inconsistent input fingerprint and is not accepted as verified biological validation. See `validation.json` and `GENOME_WORKBENCH_METHODS.md`. This note preserves the release history.
+
 # Genome Evidence Audit v0.3.0-alpha.2
 
 This prerelease contains the integrated browser-only _Klebsiella_ workbench introduced in v0.3.0-alpha.1 and corrects Aioli initialisation in the optimized GitHub Pages build.

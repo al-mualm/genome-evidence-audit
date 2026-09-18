@@ -47,9 +47,11 @@ Analysis runs in browser memory and the application has no analysis backend, acc
 - AMR reference snapshot: CARD 3.2.9 as bundled by that Kleborate commit
 - Species panel: canonical 15-mer, bottom-2000 MinHash sketches generated from ten pinned Kleborate test references
 
-The workbench is an alpha research implementation. On public assembly ERR10921830, browser results agreed with official Kleborate for assembly size, contig count, N50, _K. pneumoniae_ assignment, ST147, 12 high-confidence AMR-family loci after non-redundancy/partial-hit handling, and virulence score 0. Exact AMR allele labels can differ because the website reports the closest nucleotide reference and does not reproduce Kleborate's protein-level mutation and truncation logic. QRDR, porin and colistin-resistance mutation calling are not implemented in this alpha release.
+The workbench is an alpha research implementation. A provenance review found that the recorded SHA-256 for the historical ERR10921830 comparison did not match the archived assembly. The corrected fingerprint is recorded in `docs/validation.json`. The earlier full-workbench concordance claim is excluded from verified validation evidence until matched comparator and browser outputs are reproduced.
 
-The earlier retention core retains computational parity with the bundled Python reference across 107 study datasets and 733 marker transitions. This checks calculation agreement, not biological or clinical validity.
+A fresh comparison of the exact-retention core with its Python reference passed on all 103 public datasets and 705 marker transitions. `docs/retention-validation.json` records input and implementation fingerprints. The four older local analyses used a different input generation and are excluded from this public count. These checks establish computational agreement, not biological or clinical accuracy. All 26 existing automated tests passed when rerun.
+
+A separate post-development technical demonstration using four newly processed study inputs passed 20 retention comparisons (four fixed-selection cases and 16 controls) and four assembly-summary comparisons. The four inputs supplied 27 complete baseline housekeeping markers; incomplete baseline typing was retained as an unresolved outcome. This module-level exercise does not establish independent biological validation.
 
 ## Local development
 
